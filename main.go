@@ -1,6 +1,6 @@
 package main
 
-import "github.com/maddevsio/grpc-rest-api-example/server"
+import "./server"
 
 func main() {
 	g := server.New()
