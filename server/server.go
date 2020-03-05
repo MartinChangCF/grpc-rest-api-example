@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	pb "github.com.tw/grpc-rest-api-example/pb"
+	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 )
@@ -82,7 +83,7 @@ func (g *GCore) Login(ctx context.Context, r *pb.LoginRequest) (*pb.LoginReply, 
 }
 
 // Logout API
-func (g *GCore) Logout(ctx context.Context) (*pb.LogoutReply, error) {
+func (g *GCore) Logout(ctx context.Context, r *empty.Empty) (*pb.LogoutReply, error) {
 	log.Print("Logout - ")
 
 	var result = true

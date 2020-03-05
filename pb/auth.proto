@@ -13,7 +13,8 @@ service Authentication {
   };
   rpc Logout (google.protobuf.Empty) returns (LogoutReply) {
     option (google.api.http) = {
-      post: "/api/v1/logout"
+      post: "/api/v1/logout",
+      body: "*"
     };
   };
 }
