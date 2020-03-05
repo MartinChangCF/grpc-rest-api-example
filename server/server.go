@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -13,18 +12,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Greeter ...
-type Greeter struct {
+// GCore ...
+type GCore struct {
 	wg sync.WaitGroup
 }
 
-// New creates new server greeter
-func New() *Greeter {
-	return &Greeter{}
+// New creates new server GCore
+func New() *GCore {
+	return &GCore{}
 }
 
 // Start starts server
-func (g *Greeter) Start() {
+func (g *GCore) Start() {
 	g.wg.Add(1)
 	go func() {
 		log.Fatal(g.startGRPC())
@@ -36,27 +35,27 @@ func (g *Greeter) Start() {
 		g.wg.Done()
 	}()
 }
-func (g *Greeter) WaitStop() {
+func (g *GCore) WaitStop() {
 	g.wg.Wait()
 }
-func (g *Greeter) startGRPC() error {
+func (g *GCore) startGRPC() error {
 	lis, err := net.Listen("tcp", "localhost:8080")
 	if err != nil {
 		return err
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterGreeterServer(grpcServer, g)
+	pb.RegisterAuthenticationServer(grpcServer, g)
 	grpcServer.Serve(lis)
 	return nil
 }
-func (g *Greeter) startREST() error {
+func (g *GCore) startREST() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := pb.RegisterGreeterHandlerFromEndpoint(ctx, mux, ":8080", opts)
+	err := pb.RegisterAuthenticationHandlerFromEndpoint(ctx, mux, ":8080", opts)
 	if err != nil {
 		return err
 	}
@@ -64,12 +63,32 @@ func (g *Greeter) startREST() error {
 	return http.ListenAndServe(":8090", mux)
 }
 
-// SayHello says hello
-func (g *Greeter) SayHello(ctx context.Context, r *pb.HelloRequest) (*pb.HelloReply, error) {
+// Login API
+func (g *GCore) Login(ctx context.Context, r *pb.LoginRequest) (*pb.LoginReply, error) {
+	log.Print(r.Account, "login - ")
+
+	// Maybe it can be moved to middleware
 	if err := r.Validate(); err != nil {
 		return nil, err
 	}
-	return &pb.HelloReply{
-		Message: fmt.Sprintf("Hello, %s!", r.Name),
+
+	// An authentication check for acc & pwd
+	var result = true
+	log.Println(result)
+
+	return &pb.LoginReply{
+		Result: result,
+	}, nil
+}
+
+// Logout API
+func (g *GCore) Logout(ctx context.Context) (*pb.LogoutReply, error) {
+	log.Print("Logout - ")
+
+	var result = true
+	log.Println(result)
+
+	return &pb.LogoutReply{
+		Result: result,
 	}, nil
 }

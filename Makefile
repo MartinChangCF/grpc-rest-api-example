@@ -1,4 +1,4 @@
-TARGET=helloworld
+TARGET=auth
 
 all: clean build
 
@@ -20,22 +20,22 @@ proto:
 		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--go_out=plugins=grpc:. \
-		pb/hello.proto
+		pb/auth.proto
 	protoc -I/usr/local/include -I. \
 		-I${GOPATH}/src \
 		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--grpc-gateway_out=logtostderr=true:. \
-		pb/hello.proto
+		pb/auth.proto
 	protoc -I/usr/local/include -I. \
 		-I${GOPATH}/src \
 		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--swagger_out=logtostderr=true:. \
-		pb/hello.proto
+		pb/auth.proto
 	protoc -I/usr/local/include -I. \
 		-I${GOPATH}/src \
 		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
 		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--validate_out="lang=go:." \
-		pb/hello.proto
+		pb/auth.proto
