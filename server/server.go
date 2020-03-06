@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sync"
 
-	pb "github.com.tw/grpc-rest-api-example/pb"
+	pbAuth "github.com.tw/grpc-rest-api-example/api/auth"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
@@ -45,7 +45,7 @@ func (g *GCore) startGRPC() error {
 		return err
 	}
 	grpcServer := grpc.NewServer()
-	pb.RegisterAuthenticationServer(grpcServer, g)
+	pbAuth.RegisterAuthenticationServer(grpcServer, g)
 	grpcServer.Serve(lis)
 	return nil
 }
@@ -56,7 +56,7 @@ func (g *GCore) startREST() error {
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := pb.RegisterAuthenticationHandlerFromEndpoint(ctx, mux, ":8080", opts)
+	err := pbAuth.RegisterAuthenticationHandlerFromEndpoint(ctx, mux, ":8080", opts)
 	if err != nil {
 		return err
 	}
@@ -65,9 +65,7 @@ func (g *GCore) startREST() error {
 }
 
 // Login API
-func (g *GCore) Login(ctx context.Context, r *pb.LoginRequest) (*pb.LoginReply, error) {
-	log.Print(r.Account, "login - ")
-
+func (g *GCore) Login(ctx context.Context, r *pbAuth.LoginRequest) (*pbAuth.LoginReply, error) {
 	// Maybe it can be moved to middleware
 	if err := r.Validate(); err != nil {
 		return nil, err
@@ -75,21 +73,20 @@ func (g *GCore) Login(ctx context.Context, r *pb.LoginRequest) (*pb.LoginReply, 
 
 	// An authentication check for acc & pwd
 	var result = true
-	log.Println(result)
+	log.Print(r.Account, " login - ", result)
 
-	return &pb.LoginReply{
+	return &pbAuth.LoginReply{
 		Result: result,
 	}, nil
 }
 
 // Logout API
-func (g *GCore) Logout(ctx context.Context, r *empty.Empty) (*pb.LogoutReply, error) {
-	log.Print("Logout - ")
+func (g *GCore) Logout(ctx context.Context, r *empty.Empty) (*pbAuth.LogoutReply, error) {
 
 	var result = true
-	log.Println(result)
+	log.Print("Logout - ", result)
 
-	return &pb.LogoutReply{
+	return &pbAuth.LogoutReply{
 		Result: result,
 	}, nil
 }
