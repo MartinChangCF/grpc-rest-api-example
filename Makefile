@@ -14,7 +14,7 @@ proto:
 	protoc \
 		--proto_path=. \
 		--proto_path=/usr/local/include \
-		--proto_path=googleapis \
+		--proto_path=third_party/googleapis \
 		--proto_path=${protoc-gen-validate} \
 		--go_out=plugins=grpc:. \
 		--grpc-gateway_out=logtostderr=true:. \
