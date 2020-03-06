@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "pb/auth.proto",
+    "title": "definition/auth.proto",
     "version": "version not set"
   },
   "consumes": [
@@ -18,7 +18,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/LoginReply"
+              "$ref": "#/definitions/authLoginReply"
             }
           },
           "default": {
@@ -34,7 +34,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/LoginRequest"
+              "$ref": "#/definitions/authLoginRequest"
             }
           }
         ],
@@ -50,7 +50,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/LogoutReply"
+              "$ref": "#/definitions/authLogoutReply"
             }
           },
           "default": {
@@ -77,7 +77,7 @@
     }
   },
   "definitions": {
-    "LoginReply": {
+    "authLoginReply": {
       "type": "object",
       "properties": {
         "result": {
@@ -86,7 +86,7 @@
         }
       }
     },
-    "LoginRequest": {
+    "authLoginRequest": {
       "type": "object",
       "properties": {
         "account": {
@@ -97,7 +97,7 @@
         }
       }
     },
-    "LogoutReply": {
+    "authLogoutReply": {
       "type": "object",
       "properties": {
         "result": {
