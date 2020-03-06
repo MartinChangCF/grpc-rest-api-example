@@ -1,35 +1,23 @@
-TARGET=auth
+protoc-gen-validate=vendor/github.com/envoyproxy/protoc-gen-validate
 
-all: clean build
+all: build
 
-clean:
-	rm -rf $(TARGET)
+env:
+	go mod vendor
+	git submodule init
+	git submodule update
 
 build:
-	go build -o $(TARGET) main.go
+	go build
 
 proto:
-	protoc -I/usr/local/include -I. \
-		-I${GOPATH}/src \
-		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
+	protoc \
+		--proto_path=. \
+		--proto_path=/usr/local/include \
+		--proto_path=googleapis \
+		--proto_path=${protoc-gen-validate} \
 		--go_out=plugins=grpc:. \
-		pb/auth.proto
-	protoc -I/usr/local/include -I. \
-		-I${GOPATH}/src \
-		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--grpc-gateway_out=logtostderr=true:. \
-		pb/auth.proto
-	protoc -I/usr/local/include -I. \
-		-I${GOPATH}/src \
-		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--swagger_out=logtostderr=true:. \
-		pb/auth.proto
-	protoc -I/usr/local/include -I. \
-		-I${GOPATH}/src \
-		-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-		-I${GOPATH}/src/github.com/envoyproxy/protoc-gen-validate \
 		--validate_out="lang=go:." \
-		pb/auth.proto
+		definition/*.proto
