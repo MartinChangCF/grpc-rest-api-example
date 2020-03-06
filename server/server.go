@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"sync"
 
-	pbAuth "github.com.tw/grpc-rest-api-example/api/auth"
+	pbAuth "github.com.tw/intri-type/api/auth"
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"

@@ -1,4 +1,4 @@
-module github.com.tw/grpc-rest-api-example
+module github.com.tw/intri-type
 
 go 1.14
 
